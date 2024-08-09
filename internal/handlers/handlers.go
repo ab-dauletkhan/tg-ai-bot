@@ -4,33 +4,29 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/ab-dauletkhan/tg-ai-bot/internal/ai"
 	"github.com/ab-dauletkhan/tg-ai-bot/internal/balance"
-	"github.com/ab-dauletkhan/tg-ai-bot/internal/keyboards"
+	"github.com/ab-dauletkhan/tg-ai-bot/internal/navigation"
 	"github.com/ab-dauletkhan/tg-ai-bot/internal/utils"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+var choosenAI string
+
 func HandleMessage(bot *tgbotapi.BotAPI, message *tgbotapi.Message, dbpool *pgxpool.Pool) {
 	if message.IsCommand() {
 		utils.PrintMessage(message)
 
 		switch message.Command() {
-		// case "help":
-		// 	msg.Text = "Help command received."
 		case "start":
 			msg := tgbotapi.NewMessage(message.Chat.ID, HandleStart(bot, message, dbpool))
-			msg.ReplyMarkup = keyboards.MainMenuKeyboard()
+			msg.ReplyMarkup = navigation.MainMenuKeyboard()
 			msg.ParseMode = tgbotapi.ModeMarkdown
 			if _, err := bot.Send(msg); err != nil {
 				log.Panic(err)
 			}
-
-			// case "balance":
-			// 	HandleBalance(bot, message, dbpool, msg)
-			// default:
-			// 	msg.Text = "I don't know that command"
 		}
 	} else {
 		utils.PrintMessage(message)
@@ -51,17 +47,6 @@ func HandleEditedMessage(bot *tgbotapi.BotAPI, editedMessage *tgbotapi.Message) 
 }
 
 func HandleStart(bot *tgbotapi.BotAPI, message *tgbotapi.Message, dbpool *pgxpool.Pool) string {
-	welcomeMessage :=
-		`# 🤖 Welcome to GenAI Bot!
-
-		_I can_ answer your questions using different AI models. You can choose your preferred AI and manage your balance for accessing premium features.
-
-		Available Commands:
-		- /help: Comprehensive guide
-		- /settings: Customize your experience
-
-		What would you like to do?
-		`
 
 	userName := message.From.FirstName + " " + message.From.LastName
 	resp := fmt.Sprintf("Hello, %s! I'm here to assist you.\n\n", userName)
@@ -78,17 +63,15 @@ func HandleStart(bot *tgbotapi.BotAPI, message *tgbotapi.Message, dbpool *pgxpoo
 
 		err := balance.InsertBalance(dbpool, b)
 		if err != nil {
-			resp += "Error inserting balance: " + err.Error()
+			resp += "Error setting balance: " + err.Error()
 		} else {
-			fmt.Println("Balance inserted")
-			resp += "Your balance has been set to 0.0."
+			resp += "Your balance has been set to 0."
 		}
 	} else {
-		fmt.Println("Balance already exists")
 		resp += fmt.Sprintf("Your current balance is %.2f.", b.Amount)
 	}
 
-	return welcomeMessage + resp
+	return navigation.MainMenuText + resp
 }
 
 func HandleBalance(bot *tgbotapi.BotAPI, message *tgbotapi.Message, dbpool *pgxpool.Pool, msg tgbotapi.MessageConfig) {
@@ -104,8 +87,11 @@ func HandleNonCommandMessage(bot *tgbotapi.BotAPI, message *tgbotapi.Message) {
 	if message.Photo != nil {
 		HandlePhotoMessage(bot, message)
 	} else {
-		msg := tgbotapi.NewMessage(message.Chat.ID, "You sent: "+message.Text)
+		msg := tgbotapi.NewMessage(message.Chat.ID, "")
 		msg.ReplyToMessageID = message.MessageID
+
+		msg.Text = ai.GenerateResponse(message.Text, choosenAI)
+		// msg.ParseMode = tgbotapi.ModeMarkdown
 
 		if _, err := bot.Send(msg); err != nil {
 			panic(err)
@@ -139,7 +125,7 @@ func HandleCallbackQuery(bot *tgbotapi.BotAPI, callbackQuery *tgbotapi.CallbackQ
 			callbackQuery.Message.Chat.ID,
 			callbackQuery.Message.MessageID,
 			"Please choose an AI model.",
-			keyboards.ChooseAIKeyboard(),
+			navigation.ChooseAIKeyboard(),
 		)
 
 	case "check_balance":
@@ -151,10 +137,11 @@ func HandleCallbackQuery(bot *tgbotapi.BotAPI, callbackQuery *tgbotapi.CallbackQ
 				"Error getting balance: "+err.Error(),
 			)
 		} else {
-			msg = tgbotapi.NewEditMessageText(
+			msg = tgbotapi.NewEditMessageTextAndMarkup(
 				callbackQuery.Message.Chat.ID,
 				callbackQuery.Message.MessageID,
 				fmt.Sprintf("Your current balance is %.2f.", b.Amount),
+				navigation.CheckBalanceKeyboard(),
 			)
 		}
 
@@ -162,9 +149,17 @@ func HandleCallbackQuery(bot *tgbotapi.BotAPI, callbackQuery *tgbotapi.CallbackQ
 		msg = tgbotapi.NewEditMessageTextAndMarkup(
 			callbackQuery.Message.Chat.ID,
 			callbackQuery.Message.MessageID,
-			"Back to the main menu.",
-			keyboards.MainMenuKeyboard(),
+			navigation.MainMenuText,
+			navigation.MainMenuKeyboard(),
 		)
+
+	case "gemini":
+		msg = tgbotapi.NewEditMessageText(
+			callbackQuery.Message.Chat.ID,
+			callbackQuery.Message.MessageID,
+			navigation.AIModelText("Gemini"),
+		)
+		choosenAI = "gemini"
 
 	default:
 		msg = tgbotapi.NewEditMessageText(

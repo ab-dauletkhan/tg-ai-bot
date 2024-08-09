@@ -5,11 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="136649f0-62e7-4b76-9865-fc2edf8aece8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/cmd/tg-bot/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/tg-bot/run.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/ai/gemini/gemini.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/ai/middleware.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/navigation/texts.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/temp/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/tgbot/run.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/tg-bot/run.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internals/gemini/response.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internals/tg-bot/helpers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/ai/gemini.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/handlers/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/handlers/handlers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/keyboards/keyboards.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/navigation/keyboards.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/keyboards/texts.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,19 +34,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenDatabaseViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/dauletkhan/Documents/gitted/rent_ai"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenDatabaseViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/dauletkhan/Documents/gitted/rent_ai&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "azure",
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;azure&quot;,
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
 </project>

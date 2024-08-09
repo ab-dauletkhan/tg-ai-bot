@@ -1,4 +1,4 @@
-package keyboards
+package navigation
 
 import tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 
@@ -13,15 +13,22 @@ func MainMenuKeyboard() tgbotapi.InlineKeyboardMarkup {
 }
 
 func ChooseAIKeyboard() tgbotapi.InlineKeyboardMarkup {
-	gpt3Button := tgbotapi.NewInlineKeyboardButtonData("GPT-3", "gpt3")
-	gpt4Button := tgbotapi.NewInlineKeyboardButtonData("GPT-4", "gpt4")
-	gpt5Button := tgbotapi.NewInlineKeyboardButtonData("GPT-5", "gpt5")
+	geminiButton := tgbotapi.NewInlineKeyboardButtonData("Gemini", "gemini")
 	backToMainMenuButton := tgbotapi.NewInlineKeyboardButtonData("Back to Main Menu", "back_to_main_menu")
 
-	row1 := tgbotapi.NewInlineKeyboardRow(gpt3Button, gpt4Button)
-	row2 := tgbotapi.NewInlineKeyboardRow(gpt5Button, backToMainMenuButton)
+	row1 := tgbotapi.NewInlineKeyboardRow(geminiButton, backToMainMenuButton)
 
-	keyboard := tgbotapi.NewInlineKeyboardMarkup(row1, row2)
+	keyboard := tgbotapi.NewInlineKeyboardMarkup(row1)
+
+	return keyboard
+}
+
+func CheckBalanceKeyboard() tgbotapi.InlineKeyboardMarkup {
+	depositButton := tgbotapi.NewInlineKeyboardButtonURL("Deposit", "https://google.com")
+	backToMainMenuButton := tgbotapi.NewInlineKeyboardButtonData("Back to Main Menu", "back_to_main_menu")
+
+	row := tgbotapi.NewInlineKeyboardRow(depositButton, backToMainMenuButton)
+	keyboard := tgbotapi.NewInlineKeyboardMarkup(row)
 
 	return keyboard
 }

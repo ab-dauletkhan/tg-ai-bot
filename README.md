@@ -26,7 +26,7 @@ Link to the bot: [Zhaldap aldym](https://t.me/zhalga_alyngan_bot)
   - **OpenAI ChatGPT**
   - **Anthropic Claude**
 - **Database**: PostgreSQL – Utilized for secure and efficient storage of user data, transactions, and AI interaction logs.
-- **Deployment**: Deployed using CI/CD pipelines for continuous integration and delivery, ensuring rapid updates and feature releases.
+<!-- - **Deployment**: Deployed using CI/CD pipelines for continuous integration and delivery, ensuring rapid updates and feature releases.-->
 
 ### Contributing
 
